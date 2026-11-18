@@ -1,0 +1,649 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Siv for Agentforce — Post-Install Setup Guide</title>
+  <meta name="description" content="Official post-installation onboarding and setup guide for Siv AI Revenue Cockpit & Agentforce on Salesforce.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0176D3;
+      --primary-hover: #014486;
+      --primary-subtle: #E8F4FD;
+      --surface: #FFFFFF;
+      --surface-subtle: #F3F3F3;
+      --surface-card: #FFFFFF;
+      --text: #181818;
+      --text-muted: #5A5A5A;
+      --text-subtle: #747474;
+      --border: #DDDBDA;
+      --border-focus: #0176D3;
+      --success: #2E844A;
+      --success-subtle: #EAF5EA;
+      --warning: #FE9339;
+      --warning-subtle: #FFF1E5;
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+      --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', Consolas, Monaco, monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #F8F9FA;
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Top banner */
+    .top-bar {
+      background: #032D60;
+      color: #FFFFFF;
+      padding: 12px 24px;
+      font-size: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .top-bar .badge {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 12px;
+    }
+
+    /* Header */
+    header.hero {
+      background: #FFFFFF;
+      border-bottom: 1px solid var(--border);
+      padding: 48px 24px 40px;
+      text-align: center;
+    }
+    .hero-content {
+      max-width: 820px;
+      margin: 0 auto;
+    }
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--primary);
+      background: var(--primary-subtle);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 16px;
+    }
+    .hero h1 {
+      font-size: 38px;
+      font-weight: 800;
+      color: #032D60;
+      line-height: 1.2;
+      margin-bottom: 14px;
+    }
+    .hero p {
+      font-size: 19px;
+      color: var(--text-muted);
+      max-width: 680px;
+      margin: 0 auto 28px;
+    }
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+    .stat-item span.icon {
+      color: var(--success);
+      font-size: 18px;
+    }
+
+    /* Main Container */
+    main {
+      max-width: 920px;
+      margin: 40px auto 80px;
+      padding: 0 24px;
+    }
+
+    /* Progress Checklist */
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .step-card {
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s ease;
+      position: relative;
+    }
+    .step-card:hover {
+      box-shadow: var(--shadow-md);
+      border-color: #C9C7C5;
+    }
+
+    .step-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 18px;
+      margin-bottom: 20px;
+    }
+    .step-num {
+      background: var(--primary);
+      color: #FFFFFF;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 17px;
+      flex-shrink: 0;
+      box-shadow: 0 2px 6px rgba(1, 118, 211, 0.3);
+    }
+    .step-header-text h2 {
+      font-size: 22px;
+      color: #032D60;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .step-header-text .step-duration {
+      font-size: 13px;
+      color: var(--text-subtle);
+      font-weight: 500;
+    }
+
+    .step-body {
+      padding-left: 56px;
+    }
+    .step-body p {
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+
+    /* Instructions & Lists */
+    ul.checklist, ol.substeps {
+      margin-bottom: 20px;
+      padding-left: 20px;
+    }
+    ul.checklist li, ol.substeps li {
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+
+    /* Code & Copy Blocks */
+    .code-box {
+      background: #0B192C;
+      color: #E2E8F0;
+      border-radius: var(--radius-md);
+      padding: 14px 18px;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      margin: 16px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid #1E293B;
+    }
+    .code-box code {
+      overflow-x: auto;
+      white-space: nowrap;
+      color: #38BDF8;
+    }
+    .copy-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #FFFFFF;
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+    .copy-btn:hover {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+
+    /* Screenshot Embed */
+    .screenshot-frame {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin: 20px 0;
+      background: #FAFAFA;
+      box-shadow: var(--shadow-sm);
+    }
+    .screenshot-frame img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .screenshot-caption {
+      padding: 8px 14px;
+      font-size: 13px;
+      color: var(--text-muted);
+      background: #F3F3F3;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* Alert / Callout */
+    .callout {
+      border-left: 4px solid var(--primary);
+      background: var(--primary-subtle);
+      padding: 16px 20px;
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      margin: 20px 0;
+      font-size: 15px;
+    }
+    .callout.warning {
+      border-left-color: var(--warning);
+      background: var(--warning-subtle);
+    }
+    .callout.success {
+      border-left-color: var(--success);
+      background: var(--success-subtle);
+    }
+    .callout strong {
+      display: block;
+      margin-bottom: 4px;
+      color: #032D60;
+    }
+
+    /* FAQ Section */
+    .faq-section {
+      margin-top: 60px;
+      border-top: 1px solid var(--border);
+      padding-top: 48px;
+    }
+    .faq-section h2 {
+      font-size: 26px;
+      color: #032D60;
+      margin-bottom: 24px;
+      font-weight: 800;
+    }
+    .faq-item {
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      margin-bottom: 14px;
+      overflow: hidden;
+    }
+    .faq-question {
+      padding: 18px 22px;
+      cursor: pointer;
+      font-weight: 600;
+      color: #032D60;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+    }
+    .faq-question:hover {
+      background: var(--surface-subtle);
+    }
+    .faq-answer {
+      padding: 0 22px 18px;
+      color: var(--text-muted);
+      font-size: 15px;
+      display: none;
+      line-height: 1.6;
+    }
+    .faq-item.active .faq-answer {
+      display: block;
+    }
+    .faq-item.active .faq-toggle {
+      transform: rotate(45deg);
+    }
+    .faq-toggle {
+      font-size: 20px;
+      font-weight: 700;
+      transition: transform 0.2s ease;
+      color: var(--primary);
+    }
+
+    /* Action Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--primary);
+      color: #FFFFFF;
+      font-weight: 600;
+      padding: 10px 20px;
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      font-size: 15px;
+      transition: background 0.15s ease;
+    }
+    .btn:hover {
+      background: var(--primary-hover);
+    }
+    .btn.secondary {
+      background: #FFFFFF;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+    }
+    .btn.secondary:hover {
+      background: var(--primary-subtle);
+    }
+
+    /* Footer */
+    footer {
+      background: #FFFFFF;
+      border-top: 1px solid var(--border);
+      padding: 36px 24px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+    footer a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 680px) {
+      .hero h1 { font-size: 28px; }
+      .step-body { padding-left: 0; margin-top: 14px; }
+      .step-card { padding: 20px; }
+      .hero-stats { gap: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top bar -->
+  <div class="top-bar">
+    <div><strong>Siv for Agentforce</strong> · Official ISV Managed Package (2GP)</div>
+    <div class="badge">AppExchange & 2GP Ready</div>
+  </div>
+
+  <!-- Hero Header -->
+  <header class="hero">
+    <div class="hero-content">
+      <div class="hero-tag">✨ Quick-Start Setup Guide</div>
+      <h1>Siv is Installed! Let's Connect Your Agent</h1>
+      <p>Follow these 4 simple steps to assign permissions, connect your Agentforce reasoning engine, and run your first AI Sales Brief.</p>
+      
+      <div class="hero-stats">
+        <div class="stat-item"><span class="icon">⏱️</span> Total Time: ~5 Minutes</div>
+        <div class="stat-item"><span class="icon">🔒</span> 100% Native & In-Org (User Mode)</div>
+        <div class="stat-item"><span class="icon">⚡</span> Zero Custom Code Required</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Instructions -->
+  <main>
+    <div class="timeline">
+
+      <!-- STEP 1 -->
+      <section class="step-card" id="step-1">
+        <div class="step-header">
+          <div class="step-num">1</div>
+          <div class="step-header-text">
+            <h2>Assign Siv Permission Sets</h2>
+            <div class="step-duration">Estimated time: 1 minute</div>
+          </div>
+        </div>
+        <div class="step-body">
+          <p>Salesforce requires administrators to grant package permission sets to users before accessing custom objects, tabs, and analytics workspaces.</p>
+          
+          <ol class="substeps">
+            <li>In Salesforce, navigate to <strong>Setup</strong> &rarr; <strong>Users</strong> &rarr; <strong>Permission Sets</strong>.</li>
+            <li>Locate and assign the following permission sets to your users:</li>
+          </ol>
+
+          <div class="code-box">
+            <code>raidii__Siv_Admin</code>
+            <button class="copy-btn" onclick="copyText('raidii__Siv_Admin', this)">Copy API Name</button>
+          </div>
+          <p style="font-size: 14px; color: var(--text-muted); margin-top: -8px; margin-bottom: 16px;">
+            <strong>Siv Administrator:</strong> Grants access to Siv Admin console, prompt template management, and agent publishing controls. Assign to Salesforce Admins.
+          </p>
+
+          <div class="code-box">
+            <code>raidii__Siv_User</code>
+            <button class="copy-btn" onclick="copyText('raidii__Siv_User', this)">Copy API Name</button>
+          </div>
+          <p style="font-size: 14px; color: var(--text-muted); margin-top: -8px; margin-bottom: 16px;">
+            <strong>Siv User:</strong> Grants access to the Siv Console, Siv Briefs workspace, story execution, and AI Assistant chat. Assign to Sales Reps and Managers.
+          </p>
+
+          <div class="callout">
+            <strong>Standard Agentforce Permissions:</strong>
+            Make sure your administrator user also has the standard Salesforce permissions: <code>EinsteinGPTPromptTemplateUser</code> and <code>AgentPlatformBuilder</code> enabled on their user profile or assigned permission sets.
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP 2 -->
+      <section class="step-card" id="step-2">
+        <div class="step-header">
+          <div class="step-num">2</div>
+          <div class="step-header-text">
+            <h2>Open Siv Admin & Copy Agent Script</h2>
+            <div class="step-duration">Estimated time: 30 seconds</div>
+          </div>
+        </div>
+        <div class="step-body">
+          <p>Siv packages a pre-configured Agentforce prompt script that instructs the Atlas reasoning engine how to dynamically route sales queries and synthesize briefs.</p>
+
+          <ol class="substeps">
+            <li>Open the <strong>App Launcher</strong> (the 9 dots icon in the top left) and search for <strong>Siv</strong>.</li>
+            <li>Select the <strong>Siv Admin</strong> tab (or navigate directly to <code>/lightning/n/raidii__Siv_Setup</code>).</li>
+            <li>Click on the <strong>Agent Setup</strong> sub-tab.</li>
+            <li>Click the blue <strong>"Copy Agent Script"</strong> button. The script is instantly copied to your clipboard.</li>
+          </ol>
+
+          <div class="screenshot-frame">
+            <img src="testing/screenshots/pure_cust_22/09_cust_script_copied.png" alt="Siv Agent Setup 3-Step Guided View with Copy Button" onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/rajat-raidii/siv-guide/main/testing/screenshots/pure_cust_22/09_cust_script_copied.png';">
+            <div class="screenshot-caption">
+              <span>Siv Admin &rarr; Agent Setup tab</span>
+              <span>1-Click Copy Agent Script</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP 3 -->
+      <section class="step-card" id="step-3">
+        <div class="step-header">
+          <div class="step-num">3</div>
+          <div class="step-header-text">
+            <h2>Create & Activate Agent in Agentforce Studio</h2>
+            <div class="step-duration">Estimated time: 2 minutes</div>
+          </div>
+        </div>
+        <div class="step-body">
+          <p>Now, register your new AI agent inside Salesforce's native Agentforce Studio.</p>
+
+          <ol class="substeps">
+            <li>In Salesforce Setup, navigate to <strong>Agentforce Agents</strong> (or go to <code>/lightning/setup/EinsteinCopilot/home</code>).</li>
+            <li>Click the <strong>"+ New Agent"</strong> button in the top right.</li>
+            <li>Select <strong>Agentforce Employee Agent</strong> and click <strong>Create Agent</strong>.</li>
+            <li>Fill in the basic agent details:
+              <ul style="margin: 8px 0 8px 24px;">
+                <li><strong>Agent Name:</strong> <code>Siv Agent</code></li>
+                <li><strong>API Name:</strong> <code>Siv_Agent</code></li>
+                <li><strong>Role:</strong> <code>Sales Intelligence & Revenue Strategy Assistant</code></li>
+                <li><strong>Company:</strong> Your company name</li>
+              </ul>
+            </li>
+            <li>In the <strong>Agent Instructions</strong> text area, simply <strong>Paste (Ctrl+V / Cmd+V)</strong> the script you copied in Step 2.</li>
+            <li>Click <strong>Save</strong>, then click <strong>Activate</strong> in the top header.</li>
+          </ol>
+
+          <div class="screenshot-frame">
+            <img src="testing/screenshots/pure_cust_22/10b_cust_af_new_modal.png" alt="Agentforce Studio New Agent Creation Modal" onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/rajat-raidii/siv-guide/main/testing/screenshots/pure_cust_22/10b_cust_af_new_modal.png';">
+            <div class="screenshot-caption">
+              <span>Agentforce Studio &rarr; New Agent Modal</span>
+              <span>Select Employee Agent & Activate</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP 4 -->
+      <section class="step-card" id="step-4">
+        <div class="step-header">
+          <div class="step-num">4</div>
+          <div class="step-header-text">
+            <h2>Verify Connection & Run Your First Brief</h2>
+            <div class="step-duration">Estimated time: 1 minute</div>
+          </div>
+        </div>
+        <div class="step-body">
+          <p>Your Siv Agent is now fully operational! Let's verify the active connection and run your first executive brief.</p>
+
+          <ol class="substeps">
+            <li>Return to <strong>Siv Admin &rarr; Agent Setup</strong>. The setup card will automatically display an <strong>Active (Green)</strong> status with your live Agent ID.</li>
+            <li>Click on the <strong>Siv Briefs</strong> tab in the navigation bar.</li>
+            <li>Siv automatically seeds your 4 starting revenue briefs:
+              <ul style="margin: 8px 0 8px 24px;">
+                <li><strong>Pipeline Velocity & Hydrodynamic Flow</strong></li>
+                <li><strong>Account 360 & Lifetime Value</strong></li>
+                <li><strong>Customer Retention & Dormancy Analysis</strong></li>
+                <li><strong>Rep 1-on-1 Coaching & Progression</strong></li>
+              </ul>
+            </li>
+            <li>Select <strong>Pipeline Velocity & Hydrodynamic Flow</strong> and click the blue <strong>"Run"</strong> button.</li>
+            <li>Within <strong>8–10 seconds</strong>, Siv synthesizes your active CRM opportunities, trailing 14-day velocity, and stalled risk factors into an executive summary report!</li>
+            <li>Try asking a question in the right-hand <strong>Siv Assistant Chat</strong> (e.g., <em>"What is our active pipeline by stage this quarter?"</em>) to see Agentforce Atlas reasoning in real time.</li>
+          </ol>
+
+          <div class="screenshot-frame">
+            <img src="testing/screenshots/pure_cust_22/14_cust_brief_run_completed.png" alt="Siv Completed Brief Report with Insights and Metrics" onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/rajat-raidii/siv-guide/main/testing/screenshots/pure_cust_22/14_cust_brief_run_completed.png';">
+            <div class="screenshot-caption">
+              <span>Siv Briefs &rarr; Completed Pipeline Velocity Synthesis</span>
+              <span>8s Run Time · Real Data Grounding</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- FAQ & Troubleshooting -->
+    <section class="faq-section">
+      <h2>Frequently Asked Questions & Troubleshooting</h2>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          Why did Salesforce display "This app is taking a long time to install"?
+          <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+          Because Siv contains comprehensive custom objects, LWC components, and packaged prompt templates, Salesforce compiles the components asynchronously in your org. This typically takes 60–90 seconds. Simply click <strong>"Done"</strong> when prompted; Salesforce will finalize the installation in the background and send you an email confirmation.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          Why did Salesforce ask to approve Third-Party Access for api.salesforce.com?
+          <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+          Siv interacts natively with Salesforce's official Agentforce reasoning APIs and Tooling APIs. All communication remains strictly within the Salesforce ecosystem using secure HTTPS (TLS 1.3) protocols. No data is transmitted to unauthorized external third-party servers.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          How does Credit and Token Metering work?
+          <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+          Siv includes an integrated real-time credit meter visible directly in the top bar. Every Brief run and Chat turn logs prompt tokens, completion tokens, and calculated credit burn into <code>Siv_Log__c</code> with zero cost surprises.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          What should I do if the Siv tabs look empty?
+          <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+          Ensure you have assigned the <strong>Siv Administrator</strong> (<code>raidii__Siv_Admin</code>) or <strong>Siv User</strong> (<code>raidii__Siv_User</code>) permission set to your user account (see Step 1).
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          Where can I get support or report questions?
+          <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+          Reach out directly to the Siv engineering team at <a href="mailto:hello@raidii.com">hello@raidii.com</a> or open an issue on the official <a href="https://github.com/rajat-raidii/raidii-Sales-ally/issues" target="_blank" rel="noopener">GitHub Repository</a>.
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2026 Raidii Inc. All rights reserved. Siv is a trademark of Raidii Inc. Built for Salesforce Agentforce.</p>
+    <p style="margin-top: 8px;">
+      <a href="https://github.com/rajat-raidii/raidii-Sales-ally" target="_blank" rel="noopener">GitHub Repository</a> &bull;
+      <a href="mailto:hello@raidii.com">Support: hello@raidii.com</a>
+    </p>
+  </footer>
+
+  <script>
+    function copyText(text, btn) {
+      navigator.clipboard.writeText(text).then(() => {
+        const original = btn.innerText;
+        btn.innerText = 'Copied!';
+        btn.style.background = '#2E844A';
+        btn.style.borderColor = '#2E844A';
+        setTimeout(() => {
+          btn.innerText = original;
+          btn.style.background = '';
+          btn.style.borderColor = '';
+        }, 2000);
+      });
+    }
+
+    function toggleFaq(el) {
+      const parent = el.closest('.faq-item');
+      parent.classList.toggle('active');
+    }
+  </script>
+</body>
+</html>
